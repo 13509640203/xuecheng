@@ -22,7 +22,7 @@ import java.util.List;
 @Document(collection = "cms_site")
 public class CmsSite {
 
-    //站点ID
+    //站点ID..
     @Id
     private String siteId;
     //站点名称
