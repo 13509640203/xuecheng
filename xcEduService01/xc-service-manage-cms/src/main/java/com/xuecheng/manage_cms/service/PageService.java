@@ -1,5 +1,6 @@
 package com.xuecheng.manage_cms.service;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.model.response.CommonCode;
@@ -34,7 +35,7 @@ public class PageService {
     public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest){
 
         //分页参数
-        if(page <=0){
+       /* if(page <=0){
             page = 1;
         }
         page = page -1;
@@ -46,7 +47,25 @@ public class PageService {
         QueryResult queryResult = new QueryResult();
         queryResult.setList(all.getContent());//数据列表
         queryResult.setTotal(all.getTotalElements());//数据总记录数
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);
-        return queryResponseResult;
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);*/
+
+     //   return queryResponseResult;
+
+        if(page<=0){//初始化为
+            page=1;
+        }
+        page=page-1;
+        if(size<=0){
+            size=10;
+        }
+        Pageable Pageable = PageRequest.of(page, size);
+        Page<CmsPage> all = cmsPageRepository.findAll(Pageable);
+        QueryResult<CmsPage> queryResult = new QueryResult<>();
+        if(all.getSize()>0) {
+            queryResult.setList(all.getContent());
+            queryResult.setTotal(all.getTotalElements());
+            return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+        }
+        return new QueryResponseResult(CommonCode.FAIL, queryResult);
     }
 }

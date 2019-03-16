@@ -1,5 +1,6 @@
 package com.xuecheng.framework.model.response;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -28,6 +29,7 @@ public class ResponseResult implements Response {
         this.success = resultCode.success();
         this.code = resultCode.code();
         this.message = resultCode.message();
+
     }
 
     public static ResponseResult SUCCESS(){

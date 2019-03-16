@@ -1,6 +1,7 @@
 package com.xuecheng.manage_cms.dao;
 
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.CmsPageParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +31,7 @@ public class CmsPageRepositoryTest {
     @Test
     public void testFindAll(){
         List<CmsPage> all = cmsPageRepository.findAll();
-        System.out.println(all);
+        System.out.println("dd: "+all);
 
     }
 
@@ -47,7 +50,8 @@ public class CmsPageRepositoryTest {
     @Test
     public void testUpdate() {
         //查询对象
-        Optional<CmsPage> optional = cmsPageRepository.findById("5b4b1d8bf73c6623b03f8cec");
+        Optional<CmsPage> optional = cmsPageRepository.findById("5a754adf6abb500ad05688d9");
+        System.out.println("哈哈= "+optional);
         if(optional.isPresent()){
             CmsPage cmsPage = optional.get();
             //设置要修改值
@@ -59,11 +63,32 @@ public class CmsPageRepositoryTest {
         }
 
     }
+    @Test
+    public void add() {
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setPageName("popo");
+        cmsPage.setPageCreateTime(new Date());
+        cmsPage.setPageId("1234sa5555dada");
+        cmsPage.setPageStatus("00888");
+        cmsPage.setSiteId("09888888");
+        CmsPageParam cmsPageParam = new CmsPageParam();
+        cmsPageParam.setPageParamName("lan");
+        cmsPageParam.setPageParamValue("lupo");
+        List<CmsPageParam> cmsPageParams = new ArrayList<>();
+        cmsPageParams.add(cmsPageParam);
+        cmsPage.setPageParams(cmsPageParams);
+        cmsPageRepository.save(cmsPage);
+    }
 
     //根据页面名称查询
     @Test
     public void testfindByPageName(){
         CmsPage cmsPage = cmsPageRepository.findByPageName("测试页面");
         System.out.println(cmsPage);
+    }
+
+    @Test
+    public void deletedById(){
+        cmsPageRepository.deleteById("1234sa5555dada");
     }
 }

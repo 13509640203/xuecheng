@@ -14,8 +14,8 @@ import java.util.List;
  * @Date:Created in 2018/1/24 10:04.
  * @Modified By:
  */
-@Data
-@ToString
+@Data //自动生成set get方法
+@ToString  //自动生成toString
 @Document(collection = "cms_page")
 public class CmsPage {
     /**
