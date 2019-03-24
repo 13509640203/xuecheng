@@ -1,17 +1,24 @@
 package com.xuecheng.manage_cms.service;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.CmsSite;
+import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
+
+import com.xuecheng.manage_cms.dao.CmsSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 
 /**
  * @author Administrator
@@ -23,7 +30,8 @@ public class PageService {
 
     @Autowired
     CmsPageRepository cmsPageRepository;
-
+    @Autowired
+    CmsSiteRepository cmsSiteRepository;
 
     /**
      * 页面查询方法
@@ -33,23 +41,28 @@ public class PageService {
      * @return
      */
     public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest){
-
-        //分页参数
-       /* if(page <=0){
-            page = 1;
+      if(queryPageRequest==null){
+          queryPageRequest=new QueryPageRequest();
+      }
+        //条件匹配器
+       //页面名称模糊查询，需要自定义字符串的匹配器实现模糊查询
+        ExampleMatcher matching = ExampleMatcher.matching();
+        matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains());
+        CmsPage cmsPage = new CmsPage();
+        //模糊查询别名
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getPageAliase())){
+        cmsPage.setPageAliase(queryPageRequest.getPageAliase());
         }
-        page = page -1;
-        if(size<=0){
-            size = 10;
+        //条件查询站点id
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getSiteId())){
+            cmsPage.setSiteId(queryPageRequest.getSiteId());
         }
-        Pageable pageable = PageRequest.of(page,size);
-        Page<CmsPage> all = cmsPageRepository.findAll(pageable);
-        QueryResult queryResult = new QueryResult();
-        queryResult.setList(all.getContent());//数据列表
-        queryResult.setTotal(all.getTotalElements());//数据总记录数
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);*/
-
-     //   return queryResponseResult;
+        //模板id
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getTemplateId())){
+            cmsPage.setTemplateId(queryPageRequest.getTemplateId());
+        }
+        //创建条件实例
+        Example<CmsPage> example = Example.of(cmsPage, matching);
 
         if(page<=0){//初始化为
             page=1;
@@ -59,7 +72,8 @@ public class PageService {
             size=10;
         }
         Pageable Pageable = PageRequest.of(page, size);
-        Page<CmsPage> all = cmsPageRepository.findAll(Pageable);
+        Page<CmsPage> all = cmsPageRepository.findAll(example,Pageable);
+      //  cmsPageRepository.f
         QueryResult<CmsPage> queryResult = new QueryResult<>();
         if(all.getSize()>0) {
             queryResult.setList(all.getContent());
@@ -67,5 +81,22 @@ public class PageService {
             return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
         }
         return new QueryResponseResult(CommonCode.FAIL, queryResult);
+    }
+
+      //查询所有站点id
+    public QueryResponseResult queryBySiteId(){
+        List<QueryBySiteId> queryBySiteIds = new ArrayList<>();
+        List<CmsSite> list = cmsSiteRepository.findAll();
+        for(CmsSite cmsSite:list){//从CmsSite获取站点id站点名称保存到QueryBySiteId
+            QueryBySiteId queryBySiteId = new QueryBySiteId();
+            queryBySiteId.setSiteId(cmsSite.getSiteId());
+            queryBySiteId.setSiteName(cmsSite.getSiteName());
+            queryBySiteIds.add(queryBySiteId);
+
+        }
+        QueryResult<QueryBySiteId> queryResult = new QueryResult<>();
+        queryResult.setTotal(list.size());
+        queryResult.setList(queryBySiteIds);
+        return  new QueryResponseResult(CommonCode.SUCCESS,queryResult);
     }
 }

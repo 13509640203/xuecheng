@@ -2,6 +2,7 @@ package com.xuecheng.manage_cms.controller;
 
 import com.xuecheng.api.cms.CmsPageControllerApi;
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -47,8 +48,12 @@ public class CmsPageController implements CmsPageControllerApi {
         QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);
         return queryResponseResult;*/
         //调用service
-
-
         return pageService.findList(page,size,queryPageRequest);
+    }
+
+    @Override
+    @GetMapping("/list/bySiteId")
+    public QueryResponseResult queryBySiteId() {
+        return pageService.queryBySiteId();
     }
 }

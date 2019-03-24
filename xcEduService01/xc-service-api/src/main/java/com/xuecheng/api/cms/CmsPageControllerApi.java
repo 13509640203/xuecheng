@@ -1,5 +1,6 @@
 package com.xuecheng.api.cms;
 
+import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import io.swagger.annotations.Api;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import javax.naming.Name;
+import java.util.List;
 
 @Api(value="cms页面管理接口",description = "cms页面管理接口，提供页面的增、删、改、查")
 public interface CmsPageControllerApi {
@@ -22,4 +24,7 @@ public interface CmsPageControllerApi {
             @ApiImplicitParam(name="size",value = "一页显示数量",required = true ,paramType = "path",dataType = "int")
     })
     public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest);
+    //查询所有门户
+    @ApiOperation("查询所有的站点")
+    public QueryResponseResult queryBySiteId();
 }
