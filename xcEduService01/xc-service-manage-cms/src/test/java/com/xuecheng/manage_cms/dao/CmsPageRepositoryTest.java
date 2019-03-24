@@ -6,9 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -83,12 +81,34 @@ public class CmsPageRepositoryTest {
     //根据页面名称查询
     @Test
     public void testfindByPageName(){
-        CmsPage cmsPage = cmsPageRepository.findByPageName("测试页面");
+        CmsPage cmsPage = cmsPageRepository.findByPageName("index.html");
         System.out.println(cmsPage);
     }
 
     @Test
+    public void findByPageNameAndPageType(){
+        CmsPage cmsPage = cmsPageRepository.findByPageNameAndPageType("index.html","0");
+        System.out.println(cmsPage);
+    }
+////根据页面名称和类型查询
+//CmsPage findByPageNameAndPageType(String pageName,String pageType);
+    @Test
     public void deletedById(){
         cmsPageRepository.deleteById("1234sa5555dada");
+    }
+    //自定义查询
+    @Test
+    public void findAll01(){
+        //条件匹配器
+        ExampleMatcher matching = ExampleMatcher.matching();
+        matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains());
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setPageAliase("课程详情");
+       // cmsPage.setSiteId("5a751fab6abb5044e0d19ea1");
+        //创建条件实例
+        Example<CmsPage> example = Example.of(cmsPage, matching);
+        Pageable pageable =PageRequest.of (0,10);
+        Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);
+        System.out.println("结果："+all);
     }
 }

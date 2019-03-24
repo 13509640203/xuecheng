@@ -47,8 +47,6 @@ public class CmsPageController implements CmsPageControllerApi {
         QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);
         return queryResponseResult;*/
         //调用service
-
-
         return pageService.findList(page,size,queryPageRequest);
     }
 }

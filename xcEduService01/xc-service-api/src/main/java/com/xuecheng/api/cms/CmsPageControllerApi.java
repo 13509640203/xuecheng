@@ -22,4 +22,5 @@ public interface CmsPageControllerApi {
             @ApiImplicitParam(name="size",value = "一页显示数量",required = true ,paramType = "path",dataType = "int")
     })
     public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest);
+    //通过
 }
