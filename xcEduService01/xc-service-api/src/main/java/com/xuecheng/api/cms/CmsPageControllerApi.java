@@ -1,7 +1,9 @@
 package com.xuecheng.api.cms;
 
+import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
+import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,5 +30,9 @@ public interface CmsPageControllerApi {
     //查询所有门户
     @ApiOperation("查询所有的站点")
     public QueryResponseResult queryBySiteId();
+
+    //新增页面
+    @ApiOperation("添加页面")
+    public CmsPageResult add(CmsPage cmsPage);
 
 }

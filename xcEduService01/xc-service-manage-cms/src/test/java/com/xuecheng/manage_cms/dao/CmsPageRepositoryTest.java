@@ -151,6 +151,12 @@ public class CmsPageRepositoryTest {
         System.out.println("结果："+all);
     }
 
+    @Test
+    public void findAll03(){
+        CmsPage path = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath("", "", "");
+        System.out.println("结果："+path);
+    }
+
 
 
 

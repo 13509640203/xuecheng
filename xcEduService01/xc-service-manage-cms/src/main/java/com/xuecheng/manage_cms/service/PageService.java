@@ -7,6 +7,7 @@ import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
+import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
@@ -99,5 +100,21 @@ public class PageService {
         queryResult.setTotal(list.size());
         queryResult.setList(queryBySiteIds);
         return  new QueryResponseResult(CommonCode.SUCCESS,queryResult);
+    }
+
+    public CmsPageResult add(CmsPage cmsPage){
+
+        if(cmsPage!=null){
+            CmsPage cmsPage1 = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(),
+                    cmsPage.getSiteId(), cmsPage.getPageWebPath());
+            if(cmsPage1==null){
+                //添加页面主键由spring data 自动生成
+                cmsPage.setPageId(null);
+                cmsPageRepository.save(cmsPage);
+                return new CmsPageResult(CommonCode.SUCCESS,cmsPage);
+            }
+        }
+
+          return new CmsPageResult(CommonCode.FAIL,null);
     }
 }
