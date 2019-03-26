@@ -99,6 +99,7 @@ public class CmsPageRepositoryTest {
     public void deletedById(){
         cmsPageRepository.deleteById("1234sa5555dada");
     }
+<<<<<<< .mine
     //自定义查询
     @Test
     public void findAll01(){
@@ -133,4 +134,40 @@ public class CmsPageRepositoryTest {
             queryBySiteIds.add(bySiteId);
         }
     }
+=======
+    //自定义查询
+    @Test
+    public void findAll01(){
+        //条件匹配器
+        ExampleMatcher matching = ExampleMatcher.matching();
+        matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains());
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setPageAliase("课程详情");
+       // cmsPage.setSiteId("5a751fab6abb5044e0d19ea1");
+        //创建条件实例
+        Example<CmsPage> example = Example.of(cmsPage, matching);
+        Pageable pageable =PageRequest.of (0,10);
+        Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);
+        System.out.println("结果："+all);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 }

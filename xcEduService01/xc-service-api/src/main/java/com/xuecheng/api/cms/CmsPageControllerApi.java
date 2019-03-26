@@ -24,7 +24,13 @@ public interface CmsPageControllerApi {
             @ApiImplicitParam(name="size",value = "一页显示数量",required = true ,paramType = "path",dataType = "int")
     })
     public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest);
+<<<<<<< .mine
     //查询所有门户
     @ApiOperation("查询所有的站点")
     public QueryResponseResult queryBySiteId();
+=======
+    //通过
+
+
+>>>>>>> .theirs
 }
