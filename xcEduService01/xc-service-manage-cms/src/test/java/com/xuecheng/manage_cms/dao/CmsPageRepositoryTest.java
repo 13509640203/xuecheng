@@ -99,7 +99,7 @@ public class CmsPageRepositoryTest {
     public void deletedById(){
         cmsPageRepository.deleteById("1234sa5555dada");
     }
-<<<<<<< .mine
+
     //自定义查询
     @Test
     public void findAll01(){
@@ -134,10 +134,10 @@ public class CmsPageRepositoryTest {
             queryBySiteIds.add(bySiteId);
         }
     }
-=======
+
     //自定义查询
     @Test
-    public void findAll01(){
+    public void findAll02(){
         //条件匹配器
         ExampleMatcher matching = ExampleMatcher.matching();
         matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains());
@@ -169,5 +169,4 @@ public class CmsPageRepositoryTest {
 
 
 
->>>>>>> .theirs
 }

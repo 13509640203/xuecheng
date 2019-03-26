@@ -1,12 +1,8 @@
 package com.xuecheng.manage_cms.service;
 
-<<<<<<< .mine
+import com.xuecheng.framework.domain.cms.QueryBySiteId;
 
 
-=======
-import com.sun.deploy.util.StringUtils;
-import com.sun.org.apache.bcel.internal.generic.NEW;
->>>>>>> .theirs
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.QueryBySiteId;
@@ -15,30 +11,16 @@ import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
-<<<<<<< .mine
-
 import com.xuecheng.manage_cms.dao.CmsSiteRepository;
-=======
 
-
->>>>>>> .theirs
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-<<<<<<< .mine
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
-=======
-
-
-
-
-
->>>>>>> .theirs
 /**
  * @author Administrator
  * @version 1.0
