@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Administrator
@@ -116,5 +117,29 @@ public class PageService {
         }
 
           return new CmsPageResult(CommonCode.FAIL,null);
+    }
+     //更新前通过id查找再回显
+    public CmsPage findById(String id) {
+        Optional<CmsPage> byId = cmsPageRepository.findById(id);
+        if(byId.isPresent()){//不为空
+            return byId.get();
+        }
+        return null;
+    }
+    //更新页面
+    public CmsPageResult update(CmsPage cmsPage, String id) {
+        CmsPage cmsPage1 = findById(id);
+        if(cmsPage1!=null){
+            cmsPage1.setSiteId(cmsPage.getSiteId());
+            cmsPage1.setTemplateId(cmsPage.getTemplateId());
+            cmsPage1.setPageName(cmsPage.getPageName());
+            cmsPage1.setPagePhysicalPath(cmsPage.getPagePhysicalPath());
+            cmsPage1.setPageWebPath(cmsPage.getPageWebPath());
+            cmsPage1.setPageAliase(cmsPage.getPageAliase());
+            cmsPage1.setPageCreateTime(cmsPage.getPageCreateTime());
+            cmsPageRepository.save(cmsPage1);
+            return new CmsPageResult(CommonCode.SUCCESS,cmsPage1);
+        }
+        return new CmsPageResult(CommonCode.FAIL,null);
     }
 }

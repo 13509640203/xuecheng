@@ -35,4 +35,9 @@ public interface CmsPageControllerApi {
     @ApiOperation("添加页面")
     public CmsPageResult add(CmsPage cmsPage);
 
+    @ApiOperation("通过id查找回显数据")
+    public CmsPage findById(String id);
+
+    @ApiOperation("更新页面")
+    public CmsPageResult update(CmsPage cmsPage,String id);
 }
