@@ -154,6 +154,7 @@ public class PageService {
             cmsPage1.setPageWebPath(cmsPage.getPageWebPath());
             cmsPage1.setPageAliase(cmsPage.getPageAliase());
             cmsPage1.setPageCreateTime(cmsPage.getPageCreateTime());
+            cmsPage1.setDataUrl(cmsPage.getDataUrl());
             cmsPageRepository.save(cmsPage1);
             return new CmsPageResult(CommonCode.SUCCESS,cmsPage1);
         }
