@@ -7,7 +7,9 @@ import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
+import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
@@ -108,6 +110,11 @@ public class PageService {
         if(cmsPage!=null){
             CmsPage cmsPage1 = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(),
                     cmsPage.getSiteId(), cmsPage.getPageWebPath());
+
+            if(cmsPage1!=null){//CmsCode是枚举，实现ResultCode
+                ExceptionCast.cast(CmsCode.CMS_ADDPAGE_EXISTSNAME);
+            }
+
             if(cmsPage1==null){
                 //添加页面主键由spring data 自动生成
                 cmsPage.setPageId(null);
@@ -139,6 +146,15 @@ public class PageService {
             cmsPage1.setPageCreateTime(cmsPage.getPageCreateTime());
             cmsPageRepository.save(cmsPage1);
             return new CmsPageResult(CommonCode.SUCCESS,cmsPage1);
+        }
+
+        return new CmsPageResult(CommonCode.FAIL,null);
+    }
+     //通过id删除
+    public CmsPageResult deleteById(String id) {
+        if(id!=null){
+            cmsPageRepository.deleteById(id);
+            return new CmsPageResult(CommonCode.SUCCESS,null);
         }
         return new CmsPageResult(CommonCode.FAIL,null);
     }

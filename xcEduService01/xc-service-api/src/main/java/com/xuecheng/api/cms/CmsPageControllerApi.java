@@ -40,4 +40,8 @@ public interface CmsPageControllerApi {
 
     @ApiOperation("更新页面")
     public CmsPageResult update(CmsPage cmsPage,String id);
+
+    @ApiOperation("通过id删除数据")
+    public CmsPageResult deleteById(String id);
+
 }
