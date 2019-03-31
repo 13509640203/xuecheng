@@ -52,7 +52,8 @@ public class PageService {
         //条件匹配器
        //页面名称模糊查询，需要自定义字符串的匹配器实现模糊查询
         ExampleMatcher matching = ExampleMatcher.matching();
-        matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains());
+        matching=  matching.withMatcher("pageAliase",ExampleMatcher.GenericPropertyMatchers.contains())
+                             .withMatcher("pageName",ExampleMatcher.GenericPropertyMatchers.contains());
         CmsPage cmsPage = new CmsPage();
         //模糊查询别名
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getPageAliase())){
@@ -61,6 +62,15 @@ public class PageService {
         //条件查询站点id
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getSiteId())){
             cmsPage.setSiteId(queryPageRequest.getSiteId());
+        }
+        //页面名称 模糊查询
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getPageName())){
+            cmsPage.setPageName(queryPageRequest.getPageName());
+        }
+
+        //页面类型
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getPageType())){
+            cmsPage.setPageType(queryPageRequest.getPageType());
         }
         //模板id
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(queryPageRequest.getTemplateId())){

@@ -28,5 +28,8 @@ public class QueryPageRequest extends RequestData{
     //模版id
     @ApiModelProperty("模板ID")
     private String templateId;
+    @ApiModelProperty("页面类型")
+    private String pageType;
+
     //....
 }
