@@ -19,7 +19,7 @@ Hello ${name}!
             <td>${stu_index + 1}</td>
             <td <#if stu.name =='小明'>style="background:red;"</#if>>${stu.name}</td>
             <td>${stu.age}</td>
-            <td >${stu.mondy}</td>
+            <td >${stu.money}</td>
         </tr>
     </#list>
 
@@ -44,7 +44,7 @@ Hello ${name}!
     <td>${k_index + 1}</td>
     <td>${stuMap[k].name}</td>
     <td>${stuMap[k].age}</td>
-    <td >${stuMap[k].mondy}</td>
+    <td >${stuMap[k].money}</td>
 </tr>
 </#list>
 </table>
@@ -65,7 +65,7 @@ Hello ${name}!
             <td>${stu.name!''}</td>
             <td>${stu.age}</td>
             <td>${(stu.birthday?date)!''}</td>
-            <td>${stu.mondy}</td>
+            <td>${stu.money}</td>
             <td>${(stu.bestFriend.name)!''}</td>
             <td>${(stu.friends?size)!0}</td>
             <td>
