@@ -22,7 +22,8 @@ public class testRestTemplate {
     RestTemplate restTemplate;
     @Test
     public void testRestTemplate(){
-        ResponseEntity<Map> forEntity = restTemplate.getForEntity("http://localhost:31001/cms/page/get/5a754adf6abb500ad05688d9", Map.class);
+      //请求接口  返回Map的格式
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity("http://localhost:31001/cms/config/getmodel/5a791725dd573c3574ee333f", Map.class);
         System.out.println(forEntity);
     }
 }
