@@ -20,10 +20,16 @@ import java.util.Map;
 public class testRestTemplate {
     @Autowired
     RestTemplate restTemplate;
+
     @Test
     public void testRestTemplate(){
       //请求接口  返回Map的格式
         ResponseEntity<Map> forEntity = restTemplate.getForEntity("http://localhost:31001/cms/config/getmodel/5a791725dd573c3574ee333f", Map.class);
         System.out.println(forEntity);
+    }
+
+    @Test
+    public void testGridFs(){
+
     }
 }

@@ -1,10 +1,11 @@
 package com.xuecheng.manage_cms.service;
 
-import com.xuecheng.framework.domain.cms.QueryBySiteId;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSDownloadStream;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.xuecheng.framework.domain.cms.*;
 
 
-import com.xuecheng.framework.domain.cms.CmsPage;
-import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
@@ -13,17 +14,30 @@ import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
+import com.xuecheng.framework.model.response.ResultCode;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
 import com.xuecheng.manage_cms.dao.CmsSiteRepository;
 
+import com.xuecheng.manage_cms.dao.CmsTemplateRepository;
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Administrator
@@ -37,6 +51,17 @@ public class PageService {
     CmsPageRepository cmsPageRepository;
     @Autowired
     CmsSiteRepository cmsSiteRepository;
+    @Autowired
+    RestTemplate restTemplate;
+    @Autowired
+    CmsTemplateRepository cmsTemplateRepository;
+
+    //存贮和获取文件用的
+    @Autowired
+    GridFsTemplate gridFsTemplate;
+    //用户打开下载流对象的
+    @Autowired
+    GridFSBucket gridFSBucket;
 
     /**
      * 页面查询方法
@@ -170,5 +195,94 @@ public class PageService {
         return new CmsPageResult(CommonCode.FAIL,null);
     }
 
+   //页面静态化
+    public String getPageHtml(String pageId){
+        //获取页面模板数据
+        Map model = getModelByPageId(pageId);
+        if(model==null){
+            //获取页面模板为空
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAURLISNULL);
+        }
+        //获取页面模板
+        String content = getTemplateByPageId(pageId);
+        //执行静态化
+        if(StringUtils.isEmpty(content)){
+            //获取页面模板为空
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_TEMPLATEISNULL);
+        }
+        String html = getPageHtml(model, content);
+        if(StringUtils.isEmpty(html)){
+            //获取页面模板为空
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_HTMLISNULL);
+        }
+        return  html;
+    }
+    //获取模板数据
+    private Map getModelByPageId(String pageId){
+        CmsPage byId = this.findById(pageId);
+        if(byId==null){
+          ExceptionCast.cast(CmsCode.CMS_PAGE_NOTEXIST);
+        }
+        //获取dataUrl cms_page中有有dataUrl
+        String dataUrl = byId.getDataUrl();
+        if(StringUtils.isEmpty(dataUrl)){
+         ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAURLISNULL);
+        }
+        //dataUrl 就是请求新的服务
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity(dataUrl, Map.class);
+        Map body = forEntity.getBody();
+        return  body;
+    }
+    //获取页面模板
+    private String getTemplateByPageId(String pageId ) {
+        CmsPage byId = this.findById(pageId);
+        if(byId==null){
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAURLISNULL);
+        }
+        //这个id 就是 cms_template 集合中的_id
+        String templateId = byId.getTemplateId();
+        //通过这个 templateId 去数据库中cms_template集合找到templateFileId
+        if(StringUtils.isEmpty(templateId)){
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_TEMPLATEISNULL);
+        }
+        Optional<CmsTemplate> byId1 = cmsTemplateRepository.findById(templateId);
+        if(byId1.isPresent()){
+            CmsTemplate cmsTemplate = byId1.get();
+            //得到了模板文件templateFileId 就是fs_chunks集合中的files_id
+            String templateFileId = cmsTemplate.getTemplateFileId();
 
+            GridFSFile gridFSFile = gridFsTemplate.findOne(Query.query(Criteria.where("_id").is(templateFileId)));
+            //打开下载流对象
+            GridFSDownloadStream gridFSDownloadStream = gridFSBucket.openDownloadStream(gridFSFile.getObjectId());
+            //创建gridFsResource用于获取下载流对象
+            GridFsResource gridFsResource = new GridFsResource(gridFSFile, gridFSDownloadStream);
+            //获取流中的数据
+            try {
+                String contest = IOUtils.toString(gridFsResource.getInputStream(), "utf-8");
+                return  contest;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return  null;
+    }
+
+    //基于模板字符串生成静态化文件
+    private String getPageHtml(Map model,String content){
+        Configuration configuration=new Configuration(Configuration.getVersion());
+        StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
+        stringTemplateLoader.putTemplate("template",content);
+        //配置模板加载器
+        configuration.setTemplateLoader(stringTemplateLoader);
+        //得到模板
+        try {
+            Template template = configuration.getTemplate("template");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            return html;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
