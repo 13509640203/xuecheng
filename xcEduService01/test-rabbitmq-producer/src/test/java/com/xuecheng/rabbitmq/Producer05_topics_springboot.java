@@ -2,6 +2,7 @@ package com.xuecheng.rabbitmq;
 
 import com.alibaba.fastjson.JSON;
 
+import com.xuecheng.rabbitmq.comfig.RabbitmqConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -56,6 +57,14 @@ public class Producer05_topics_springboot {
          */
         rabbitTemplate.convertAndSend("ex_routing_cms_postpage",routingKey,messageString);
 
+    }
+    @Test
+    public void testSendByTopics(){
+        for (int i=0;i<5;i++){
+            String message = "sms email inform to user"+i;
+            rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM,"inform.sms.email",message);
+            System.out.println("Send Message is:'" + message + "'");
+        }
     }
 
 }

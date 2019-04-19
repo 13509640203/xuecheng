@@ -1,7 +1,6 @@
-package com.xuecheng.rabbitmq.comfig;
+package com.xuecheng.rabbitmq.config;
 
 import org.springframework.amqp.core.*;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String QUEUE_INFORM_EMAIL = "queue_inform_email";
     public static final String QUEUE_INFORM_SMS = "queue_inform_sms";
-    public static final String EXCHANGE_TOPICS_INFORM ="exchange_topics_inform";
+    public static final String EXCHANGE_TOPICS_INFORM="exchange_topics_inform";
     public static final String ROUTINGKEY_EMAIL="inform.#.email.#";
     public static final String ROUTINGKEY_SMS="inform.#.sms.#";
 

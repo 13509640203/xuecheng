@@ -5,6 +5,7 @@ import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,5 +44,6 @@ public interface CmsPageControllerApi {
 
     @ApiOperation("通过id删除数据")
     public CmsPageResult deleteById(String id);
-
+    @ApiOperation("发布页面")
+    public ResponseResult post(String pageId);
 }
