@@ -39,7 +39,8 @@ public class CourseService {
         }
         String courdeId = teachplan.getCourseid();
         String parentid = teachplan.getParentid();
-        if(StringUtils.isEmpty(parentid)||parentid.length()<=0){//父id为空,没有填父上级节点
+        if(StringUtils.isEmpty(parentid)||parentid.length()<=0){
+            //父id为空,没有填父上级节点
             parentid = this.getTeachplanParentid(courdeId);
         }
         //父节点查询出页面在某一个课程下添加课程计划时改课程的id
@@ -54,6 +55,10 @@ public class CourseService {
         teachplan1.setCourseid(courdeId);
         teachplan1.setParentid(parentid);//父节点
         teachplan1.setPname(teachplan.getPname());
+        teachplan1.setDescription(teachplan.getDescription());
+        teachplan1.setOrderby(teachplan.getOrderby());//排序章节顺序有关
+        teachplan1.setPtype(teachplan.getPtype());//视频还是文档
+        teachplan1.setTimelength(teachplan.getTimelength());//学习时长（分钟）
         teachplan1.setStatus("0");
         if(parentidGrade.equals("1")){
             teachplan1.setGrade("2");
@@ -63,7 +68,7 @@ public class CourseService {
         teanchplanRepository.save(teachplan1);
         return new ResponseResult(CommonCode.SUCCESS);
     }
-    //获取课程根节点，如果没有则添加
+    //获取课程根节点，如果没有则添加(只要courseId是当前课程的就有)
     private String getTeachplanParentid(String courseId){//父id为空,没有填父上级节点,所以Parentid=0
         List<Teachplan> byCourseidAndParentid = teanchplanRepository.findByCourseidAndParentid(courseId, "0");
         Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
