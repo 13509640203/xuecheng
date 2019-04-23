@@ -1,12 +1,19 @@
 package com.xuecheng.manage_course.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
+import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
+import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_course.dao.CourseBaseRepository;
+import com.xuecheng.manage_course.dao.CourseMapper;
 import com.xuecheng.manage_course.dao.TeachplanMapper;
 import com.xuecheng.manage_course.dao.TeanchplanRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +29,8 @@ import java.util.Optional;
 public class CourseService {
    @Autowired
    TeachplanMapper teachplanMapper;
+   @Autowired
+    CourseMapper courseMapper;
    @Autowired
     TeanchplanRepository teanchplanRepository;
     @Autowired
@@ -90,6 +99,28 @@ public class CourseService {
         }
         //不为空
         return  byCourseidAndParentid.get(0).getId();
+    }
+
+    public QueryResponseResult findCourseList(int page, int size, CourseListRequest courseListRequest) {
+        //courseListRequest 是为以后扩展做条件查询准备的
+        //第一个参数是第一页。第二参数是一页显示的数量
+        if(page<=0){
+            page=1;
+        }
+        if(size<=0){
+            size=10;
+        }
+        PageHelper.startPage(page,size);
+        Page<CourseInfo> courseList = courseMapper.findCourseList();
+        List<CourseInfo> result = courseList.getResult();
+        //总数
+        long total = courseList.getTotal();
+        //准备返回把数据放进去
+        QueryResult<CourseInfo> objectQueryResult = new QueryResult<>();
+        objectQueryResult.setList(result);
+        objectQueryResult.setTotal(total);
+
+        return new QueryResponseResult(CommonCode.SUCCESS,objectQueryResult);
     }
 
 }
