@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
+import com.xuecheng.framework.domain.system.SysDictionary;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class TestDao {
     CourseMapper courseMapper;
     @Autowired
     TeachplanMapper teachplanMapper;
+    @Autowired
+    SysDictionaryRepository sysDictionaryRepository;
     @Test
     public void testCourseBaseRepository(){
         Optional<CourseBase> optional = courseBaseRepository.findById("402885816240d276016240f7e5000002");
@@ -61,5 +64,11 @@ public class TestDao {
         System.out.println("result: "+result);
         System.out.println("===============");
         System.out.println("total: "+total);
+    }
+
+    @Test
+    public void findCourseGrade(){
+        SysDictionary byDType = sysDictionaryRepository.findSysDictionaryByDType("200");
+        System.out.println("byDType: "+byDType);
     }
 }
