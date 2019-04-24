@@ -27,6 +27,6 @@ public interface CourseControllerApi {
     public QueryResponseResult findCourseList(int page, int size,
                          CourseListRequest courseListRequest);
 
-    @ApiOperation("添加课程基础信息")
+    @ApiOperation("添加课程基础信息,")
     public ResponseResult addCourseBase(CourseBase courseBase);
 }
