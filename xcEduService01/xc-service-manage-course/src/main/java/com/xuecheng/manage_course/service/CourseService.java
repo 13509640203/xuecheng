@@ -17,6 +17,7 @@ import com.xuecheng.manage_course.dao.CourseMapper;
 import com.xuecheng.manage_course.dao.TeachplanMapper;
 import com.xuecheng.manage_course.dao.TeanchplanRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jcajce.provider.symmetric.AES;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,5 +123,22 @@ public class CourseService {
 
         return new QueryResponseResult(CommonCode.SUCCESS,objectQueryResult);
     }
-
+    //添加课程信息
+    public ResponseResult addCourseBase(CourseBase courseBase) {
+        if(courseBase==null){
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
+        CourseBase courseBase1 = new CourseBase();
+        //id自增
+        courseBase1.setId(null);
+        courseBase1.setName(courseBase.getName());
+        courseBase1.setUsers(courseBase.getUsers());
+        courseBase1.setGrade(courseBase.getGrade());
+        courseBase1.setStudymodel(courseBase.getStudymodel());
+        courseBase1.setMt(courseBase.getMt());
+        courseBase1.setSt(courseBase.getSt());
+        courseBase1.setDescription(courseBase.getDescription());
+        courseBaseRepository.save(courseBase1);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
 }
