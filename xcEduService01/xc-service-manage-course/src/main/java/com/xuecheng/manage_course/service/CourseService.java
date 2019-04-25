@@ -2,6 +2,7 @@ package com.xuecheng.manage_course.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
@@ -141,4 +142,30 @@ public class CourseService {
         courseBaseRepository.save(courseBase1);
         return new ResponseResult(CommonCode.SUCCESS);
     }
+    //课程基础信息回显
+    public CourseBase findCourseBaseByCourseId(String courseId) {
+        Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
+        if(!byId.isPresent()){
+            ExceptionCast.cast(CmsCode.COURSE_BASE_ISNULL);
+        }
+        return  byId.get();
+    }
+    //更新基础信息回显
+    public ResponseResult updateByCourseId(CourseBase courseBase ,String courseId){
+        Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
+        if(!byId.isPresent()){
+            ExceptionCast.cast(CmsCode.COURSE_BASE_ISNULL);
+        }
+        CourseBase courseBase1 = byId.get();
+        courseBase1.setName(courseBase.getName());
+        courseBase1.setUsers(courseBase.getUsers());
+        courseBase1.setGrade(courseBase.getGrade());
+        courseBase1.setStudymodel(courseBase.getStudymodel());
+        courseBase1.setMt(courseBase.getMt());
+        courseBase1.setSt(courseBase.getSt());
+        courseBase1.setDescription(courseBase.getDescription());
+        courseBaseRepository.save(courseBase1);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
 }

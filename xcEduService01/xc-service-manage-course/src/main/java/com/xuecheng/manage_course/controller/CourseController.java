@@ -42,4 +42,15 @@ public class CourseController implements CourseControllerApi{
     public ResponseResult addCourseBase(@RequestBody CourseBase courseBase) {
         return courseService.addCourseBase(courseBase);
     }
+
+    @Override
+    @GetMapping("/courseBase/list/{courseId}")
+    public CourseBase findCourseBaseByCourseId(@PathVariable("courseId") String courseId) {
+        return courseService.findCourseBaseByCourseId(courseId);
+    }
+    //更新基础信息回显
+    @PutMapping("/updateByCourseId/{courseId}")
+    public ResponseResult updateByCourseId(@RequestBody CourseBase courseBase ,@PathVariable("courseId") String courseId){
+        return courseService.updateByCourseId(courseBase,courseId);
+    }
 }

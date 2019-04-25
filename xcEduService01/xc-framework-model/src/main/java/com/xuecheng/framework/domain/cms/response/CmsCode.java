@@ -17,7 +17,8 @@ public enum CmsCode implements ResultCode {
     CMS_COURSE_PERVIEWISNULL(false,24007,"预览页面为空！"),
     CMS_PAGE_NOTEXIST(false,24006,"页面不存在！"),
     CMS_PAGE_HTNLFILEId_ISNULL(false,24008,"页面文件htmlFileId为空"),
-    CMS_PAGE_ISNULL(false,24009,"cmsPage对象为空");
+    CMS_PAGE_ISNULL(false,24009,"cmsPage对象为空"),
+    COURSE_BASE_ISNULL(false,24010,"courseBase对象为空");
     //操作代码
     boolean success;
     //操作代码

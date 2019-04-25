@@ -29,4 +29,6 @@ public interface CourseControllerApi {
 
     @ApiOperation("添加课程基础信息,")
     public ResponseResult addCourseBase(CourseBase courseBase);
+    @ApiOperation("回显课程基础信息,")
+    public CourseBase findCourseBaseByCourseId(String courseId);
 }
