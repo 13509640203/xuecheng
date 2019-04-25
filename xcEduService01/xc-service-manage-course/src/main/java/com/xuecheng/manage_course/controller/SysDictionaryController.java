@@ -24,7 +24,7 @@ public class SysDictionaryController implements SysDicthinaryControllerApi{
     @Override
     @GetMapping("/dictionary/get/{dType}")
     public SysDictionary getByType(@PathVariable("dType") String dType) {
-        System.out.println("哈哈222222222222222222222dType: "+dType);
+      //  System.out.println("哈哈222222222222222222222dType: "+dType);
         return sysDictionaryService.findCourseGrade(dType);
     }
 }
