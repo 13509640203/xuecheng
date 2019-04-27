@@ -182,23 +182,25 @@ public class CourseService {
         if(courseMarketById==null){//查出为空则添加
             courseMarketRepository.save(courseMarket);
         }
-        /*
-        id:'',
-          charge:'',
-          valid:'',
-          price:'',
-          expires: '',
-          startTime: '',
-          endTime: '',
-          users: '',
-          expiration:[],
-          courseid:this.courseid
-         */
+        if("203001".equals(courseMarket.getCharge())){
+            //免费课程应该是元，同时将金额保存到price_old
+            courseMarketById.setPrice_old(courseMarketById.getPrice());
+            courseMarketById.setPrice((float) 0.00);
+        }
+        if("203002".equals(courseMarket.getCharge())){//收费课程
+            courseMarketById.setPrice(courseMarket.getPrice());
+        }
+        if("204001".equals(courseMarket.getValid())){
+            //课程永久有效，有效期为null,startTime,endTime全部为null
+            courseMarketById.setStartTime(null);
+            courseMarketById.setEndTime(null);
+        }
+        if("204002".equals(courseMarket.getValid())){//课程限时
+            courseMarketById.setStartTime(courseMarket.getStartTime());
+            courseMarketById.setEndTime(courseMarket.getEndTime());
+        }
         courseMarketById.setCharge(courseMarket.getCharge());
         courseMarketById.setValid(courseMarket.getValid());
-        courseMarketById.setPrice(courseMarket.getPrice());
-        courseMarketById.setStartTime(courseMarket.getStartTime());
-        courseMarketById.setEndTime(courseMarket.getEndTime());
         courseMarketById.setQq(courseMarket.getQq());
         //courseMarketById.set
         courseMarketRepository.save(courseMarketById);
