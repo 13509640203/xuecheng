@@ -3,6 +3,7 @@ package com.xuecheng.manage_course.controller;
 import com.xuecheng.api.course.CourseControllerApi;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
+import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
@@ -66,9 +67,28 @@ public class CourseController implements CourseControllerApi{
         return courseService.updateCourseMarket(courseId,courseMarket);
     }
 
+
+    @Override
+    @DeleteMapping("/coursepic/delete")
+    public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
+        return courseService.deleteCoursePic(courseId);
+    }
+
     //更新基础信息回显
     @PutMapping("/updateByCourseId/{courseId}")
     public ResponseResult updateByCourseId(@RequestBody CourseBase courseBase ,@PathVariable("courseId") String courseId){
         return courseService.updateByCourseId(courseBase,courseId);
+    }
+
+    //图片上传到fasdtfs成功之后将图片保存到pic数据库中
+    @PostMapping("/coursepic/add")
+    public ResponseResult addCoursePic(@RequestParam(value = "courseId",required = true)  String courseId,
+                                       @RequestParam(value = "pic",required = true) String pic){
+        return  courseService.addCoursePic(courseId,pic);
+    }
+
+    @GetMapping("/coursepic/list/{courseId}")
+    public CoursePic findCoursePicListByCourseId(@PathVariable("courseId") String courseId){
+    return courseService.findCoursePicListByCourseId(courseId);
     }
 }

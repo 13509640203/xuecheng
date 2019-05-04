@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController implements CategoryControllerApi {
     @Autowired
     CategoryService categoryService;
-
     @Override
     @GetMapping("/list")//查询课程分类
     public CategoryNode findList() {

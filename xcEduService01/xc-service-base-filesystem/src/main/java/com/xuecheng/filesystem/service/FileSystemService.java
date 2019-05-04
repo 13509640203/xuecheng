@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 public class FileSystemService {
-   @Autowired
+    @Autowired
     FileSystemRepository fileSystemRepository;
     @Value("${xuecheng.fastdfs.tracker_servers}")
     String tracker_servers;
@@ -37,10 +37,11 @@ public class FileSystemService {
         if(multipartFile==null){
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
-        //配置初始化
-        initFdfsConfig();
        //文件上传
         String fileId = getFileId(multipartFile);
+        if(StringUtils.isEmpty(fileId)){//为空返回去，上传失败
+            ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEIDISNULL);
+        }
         //将文件id等信息存储到mongodb的文件数据库中
         FileSystem fileSystem = new FileSystem();
         fileSystem.setFileId(fileId);
@@ -63,9 +64,10 @@ public class FileSystemService {
     }
      //上传文件获得文件id
     private String getFileId(MultipartFile multipartFile){
-
+        initFdfsConfig();
+        TrackerClient trackerClient = new TrackerClient();
         try {
-            TrackerClient trackerClient = new TrackerClient();
+
             TrackerServer  trackerServer = trackerClient.getConnection();
             StorageServer storeStorage = trackerClient.getStoreStorage(trackerServer);
             StorageClient1 storageClient1 = new StorageClient1(trackerServer, storeStorage);
@@ -79,7 +81,7 @@ public class FileSystemService {
             return fileId;
         } catch (Exception e) {
             e.printStackTrace();
-           // ExceptionCast.cast();
+           ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
 
         return  null;
@@ -90,8 +92,8 @@ public class FileSystemService {
         try {
             ClientGlobal.initByTrackers(tracker_servers);
             ClientGlobal.setG_charset(charset);
-            ClientGlobal.setG_connect_timeout(connect_timeout_in_seconds);
             ClientGlobal.setG_network_timeout(network_timeout_in_seconds);
+            ClientGlobal.setG_connect_timeout(connect_timeout_in_seconds);
         } catch (Exception e) {
             e.printStackTrace();
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_JINGTAIHUAISNULL);

@@ -36,4 +36,6 @@ public interface CourseControllerApi {
     public CourseMarket getCourseMarketById(String courseId);
     @ApiOperation("更新课程营销信息")
     public ResponseResult updateCourseMarket(String id,CourseMarket courseMarket);
+    @ApiOperation("删除课程图片")
+    public ResponseResult deleteCoursePic(String courseId);
 }
