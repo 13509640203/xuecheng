@@ -343,4 +343,14 @@ public class PageService {
         cmsPageRepository.save(cmsPage);
 
     }
+
+    public CmsPageResult save(CmsPage cmsPage) {//CMS添加页面接口
+        CmsPage bydi = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(
+                cmsPage.getPageName(), cmsPage.getSiteId(), cmsPage.getPageWebPath());
+
+         if(bydi!=null){//更新
+             return this.update(cmsPage, bydi.getPageId());
+         }
+         return  this.add(cmsPage);
+    }
 }

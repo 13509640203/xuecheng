@@ -8,6 +8,7 @@ import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
+import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.exception.ExceptionCast;
@@ -40,6 +41,9 @@ public class CourseService {
     CourseMarketRepository courseMarketRepository;
     @Autowired
     CoursePicRepository coursePicRepository;
+    @Autowired
+    TeanchplanNodeRepository teanchplanNodeRepository;
+
   //查询课程计划
   public TeachplanNode findTeachplanList(String courseId){
       TeachplanNode courseList = teachplanMapper.findCourseList(courseId);
@@ -244,5 +248,24 @@ public class CourseService {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+    //课程视图 有课程基本信息 课程图片 课程营销 课程计划
+    public CourseView couserView(String courseId) {
+        CourseView courseView = new CourseView();
+        Optional<CourseBase> byId1 = courseBaseRepository.findById(courseId);
+        if(byId1.isPresent()){
+            courseView.setCourseBase(byId1.get());
+        }
+        Optional<CoursePic> byId2 = coursePicRepository.findById(courseId);
+        if(byId2.isPresent()){
+            courseView.setCoursePic(byId2.get());
+        }
+        Optional<CourseMarket> byId3 = courseMarketRepository.findById(courseId);
+        if(byId3.isPresent()){
+            courseView.setCourseMarket(byId3.get());
+        }
+        TeachplanNode courseList = teachplanMapper.findCourseList(courseId);
+        courseView.setTeachplanNode(courseList);
+        return  courseView;
     }
 }

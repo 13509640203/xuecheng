@@ -65,4 +65,14 @@ public class FreemarkerController {
         map.putAll(body);
         return  "index_banner";
     }
+
+    @RequestMapping("/course")
+    public String course(Map<String,Object> map){
+        //获取页面的dataUrl
+        String dataUrl="http://localhost:31200/course/courseview/4028858162e0bc0a0162e0bfdf1a0000";
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity(dataUrl, Map.class);
+        Map body = forEntity.getBody();
+        map.putAll(body);
+        return  "course";
+    }
 }

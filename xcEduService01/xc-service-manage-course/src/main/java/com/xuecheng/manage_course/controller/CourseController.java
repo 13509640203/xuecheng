@@ -5,6 +5,7 @@ import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -72,6 +73,12 @@ public class CourseController implements CourseControllerApi{
     @DeleteMapping("/coursepic/delete")
     public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
         return courseService.deleteCoursePic(courseId);
+    }
+    //课程视图 有课程基本信息 课程图片 课程营销 课程计划
+    @Override
+    @GetMapping("/courseview/{courseId}")
+    public CourseView couserView(@PathVariable("courseId") String courseId) {
+        return courseService.couserView(courseId);
     }
 
     //更新基础信息回显

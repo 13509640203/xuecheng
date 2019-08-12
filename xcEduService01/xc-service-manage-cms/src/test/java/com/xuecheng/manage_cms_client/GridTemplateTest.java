@@ -29,12 +29,24 @@ public class GridTemplateTest {
     GridFSBucket gridFSBucket;
     @Test
     public void testGridFs() throws FileNotFoundException {
-        //7要存贮的文件
+        //要存贮的文件
         File file = new File("d:/index_banner.ftl");
         //定义输入流
         FileInputStream fileInputStream = new FileInputStream(file);
        //向GridFS存储文件  保存文件成功得到文件Id
         ObjectId objestId = gridFsTemplate.store(fileInputStream, "index_banner.ftl");
+        String fileId = objestId.toString();
+        System.out.println("文件： "+fileId);
+
+    }
+    @Test
+    public void testGridFs2() throws FileNotFoundException {
+        //要存贮的文件
+        File file = new File("c:/course.ftl");
+        //定义输入流
+        FileInputStream fileInputStream = new FileInputStream(file);
+        //向GridFS存储文件  保存文件成功得到文件Id
+        ObjectId objestId = gridFsTemplate.store(fileInputStream, "course.ftl");
         String fileId = objestId.toString();
         System.out.println("文件： "+fileId);
 

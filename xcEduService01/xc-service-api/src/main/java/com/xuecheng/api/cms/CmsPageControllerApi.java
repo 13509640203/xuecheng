@@ -46,4 +46,6 @@ public interface CmsPageControllerApi {
     public CmsPageResult deleteById(String id);
     @ApiOperation("发布页面")
     public ResponseResult post(String pageId);
+   @ApiOperation("页面保存")
+    public CmsPageResult save(CmsPage cmsPage);
 }
