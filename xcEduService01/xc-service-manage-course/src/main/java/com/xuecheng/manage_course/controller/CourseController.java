@@ -8,6 +8,7 @@ import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_course.service.CourseService;
@@ -79,6 +80,12 @@ public class CourseController implements CourseControllerApi{
     @GetMapping("/courseview/{courseId}")
     public CourseView couserView(@PathVariable("courseId") String courseId) {
         return courseService.couserView(courseId);
+    }
+
+    @Override
+    @PostMapping("/preview/{id}")
+    public CoursePublishResult preview(@PathVariable("id") String id) {//预览课程
+        return courseService.preview(id);
     }
 
     //更新基础信息回显
