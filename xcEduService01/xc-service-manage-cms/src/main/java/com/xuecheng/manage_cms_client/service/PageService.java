@@ -11,6 +11,7 @@ import com.xuecheng.framework.domain.cms.QueryBySiteId;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -352,5 +353,29 @@ public class PageService {
              return this.update(cmsPage, bydi.getPageId());
          }
          return  this.add(cmsPage);
+    }
+    //一键页面发布
+    public CmsPostPageResult postPageQuick(CmsPage cmsPage) {
+         //保存cmspage
+        CmsPageResult save = this.save(cmsPage);
+        if(!save.isSuccess()){
+             ExceptionCast.cast(CommonCode.FAIL);
+        }
+        CmsPage cmsPage1 = save.getCmsPage();
+        //页面发布
+        ResponseResult responseResult = this.postPage(cmsPage1.getPageId());
+        if(!responseResult.isSuccess()){
+            ExceptionCast.cast(CommonCode.POST_FALL);
+        }
+        //拼接URLUrl= cmsSite.siteDomain+cmsSite.siteWebPath+ cmsPage.pageWebPath + cmsPage.pageName
+        String siteId = cmsPage1.getSiteId();
+        Optional<CmsSite> byId = cmsSiteRepository.findById(siteId);
+         if(!byId.isPresent()){
+             ExceptionCast.cast(CmsCode.CMS_SITE);
+         }
+        CmsSite cmsSite = byId.get();
+       String pageUrl=cmsSite.getSiteDomain()+cmsSite.getSiteWebPath()+cmsPage1.getPageWebPath()+cmsPage1.getPageName();
+
+        return  new CmsPostPageResult(CommonCode.SUCCESS,pageUrl);
     }
 }

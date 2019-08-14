@@ -88,6 +88,12 @@ public class CourseController implements CourseControllerApi{
         return courseService.preview(id);
     }
 
+    @Override
+    @PostMapping("/publish/{id}")
+    public CoursePublishResult publish(@PathVariable("id") String id) {
+        return courseService.publish(id);
+    }
+
     //更新基础信息回显
     @PutMapping("/updateByCourseId/{courseId}")
     public ResponseResult updateByCourseId(@RequestBody CourseBase courseBase ,@PathVariable("courseId") String courseId){

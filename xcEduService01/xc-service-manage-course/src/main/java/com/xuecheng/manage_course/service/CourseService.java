@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
@@ -322,5 +323,35 @@ public class CourseService {
         }
         String previewUrl=publish_previewUrl+pageId;
         return  new CoursePublishResult(CommonCode.SUCCESS,previewUrl);
+    }
+     //课程发布  如果发布失败不应该更新状态
+    @Transactional
+    public CoursePublishResult publish(String courseId) {
+         //调用cms一键发布接口将课程详情页面发布到服务器
+        //请求cms页面添加
+        CourseBase courseBaseById = this.findCourseBaseById(courseId);
+        //准备cms页面信息
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setSiteId(publish_siteId);
+        cmsPage.setPageName(courseId+".html");
+        cmsPage.setPageAliase(courseBaseById.getName());
+        cmsPage.setPageWebPath(publish_pageWebPath);
+        cmsPage.setPagePhysicalPath(publish_pagePhysicalPath);
+        cmsPage.setTemplateId(publish_templateId);
+        cmsPage.setDataUrl(publish_dataUrlPre+courseId);
+        CmsPostPageResult cmsPostPageResult = cmsPageClient.postPageQuick(cmsPage);
+
+        //保存课程的发布状态为已发布 202002
+        Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
+        if(!byId.isPresent()){
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
+        CourseBase courseBase = byId.get();
+        courseBase.setStatus("202002");
+        courseBaseRepository.save(courseBase);
+        //返回url 拼接的URL
+
+        String pageUrl = cmsPostPageResult.getPageUrl();
+        return  new CoursePublishResult(CommonCode.SUCCESS,pageUrl);
     }
 }
