@@ -22,7 +22,8 @@ public enum CmsCode implements ResultCode {
     COURSE_BASE_ISNULL(false,24010,"courseBase对象为空"),
     COURSE_MARK_ISNULL(false,24011,"courseMarke对象为空"),
     COURSE_COURSEBASE_ISNULL(false,24012,"查找的courseBase为空"),
-    CMS_SITE(false,240013,"cmsSite对象为空");
+    CMS_SITE(false,240013,"cmsSite对象为空"),
+    CMS_COURSEPUB(false,240014,"创建课程索引信息失败");
     //操作代码
     boolean success;
     //操作代码

@@ -1,15 +1,13 @@
 package com.xuecheng.manage_course.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
-import com.xuecheng.framework.domain.course.CourseBase;
-import com.xuecheng.framework.domain.course.CourseMarket;
-import com.xuecheng.framework.domain.course.CoursePic;
-import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.*;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
@@ -24,14 +22,18 @@ import com.xuecheng.manage_course.client.CmsPageClient;
 import com.xuecheng.manage_course.dao.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jcajce.provider.symmetric.AES;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.SimpleFormatter;
 
 @Service
 public class CourseService {
@@ -51,6 +53,8 @@ public class CourseService {
     TeanchplanNodeRepository teanchplanNodeRepository;
     @Autowired
     CmsPageClient cmsPageClient;
+    @Autowired
+    CoursePubRepository coursePubRepository;
 
     @Value("${course-publish.dataUrlPre}")
     private String publish_dataUrlPre;
@@ -351,7 +355,60 @@ public class CourseService {
         courseBaseRepository.save(courseBase);
         //返回url 拼接的URL
 
+        //保存课程索引信息
+        //创建CoursePub对象
+        CoursePub coursePub = createCourse(courseId);
+        //将CoursePub对象保存到数据库
+        CoursePub newCoursePub = saveCoursePub(courseId, coursePub);
+         if(newCoursePub==null){
+             ExceptionCast.cast(CmsCode.CMS_COURSEPUB);
+         }
         String pageUrl = cmsPostPageResult.getPageUrl();
         return  new CoursePublishResult(CommonCode.SUCCESS,pageUrl);
     }
+
+    //将CoursePub对象保存到数据库
+    private CoursePub saveCoursePub(String courseid, CoursePub coursePub){
+        CoursePub newCoursePub=null;
+        Optional<CoursePub> byId = coursePubRepository.findById(courseid);
+        if(byId.isPresent()){
+            newCoursePub=byId.get();
+        }else {
+            newCoursePub=new CoursePub();
+        }
+        BeanUtils.copyProperties(coursePub,newCoursePub);
+        newCoursePub.setId(courseid);
+        //时间戳 设置为最新的
+        newCoursePub.setTimestamp(new Date());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        newCoursePub.setPubTime(simpleDateFormat.format(new Date()));
+        coursePubRepository.save(newCoursePub);
+        return  newCoursePub;
+    }
+
+
+    //创建CoursePub对象
+    private CoursePub createCourse(String courseId){
+        CoursePub coursePub = new CoursePub();
+        Optional<CourseBase> byId = courseBaseRepository.findById(courseId);
+        if(byId.isPresent()){
+            CourseBase courseBase = byId.get();
+            //将courseBase复制到coursePub
+            BeanUtils.copyProperties(courseBase,coursePub);
+        }
+        Optional<CoursePic> byId1 = coursePicRepository.findById(courseId);
+         if(byId1.isPresent()){
+             BeanUtils.copyProperties(byId1.get(),coursePub);
+         }
+        Optional<CourseMarket> byId2 = courseMarketRepository.findById(courseId);
+         if(byId2.isPresent()){
+             BeanUtils.copyProperties(byId2.get(),coursePub);
+         }
+         //将teachplan变成json串保存起来
+        TeachplanNode teachplanNode = teachplanMapper.findCourseList(courseId);
+        String jsonString = JSON.toJSONString(teachplanNode);
+        coursePub.setTeachplan(jsonString);
+        return  coursePub;
+    }
+
 }
