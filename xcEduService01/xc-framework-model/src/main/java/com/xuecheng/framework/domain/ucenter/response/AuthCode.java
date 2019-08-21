@@ -16,8 +16,11 @@ public enum AuthCode implements ResultCode {
     AUTH_VERIFYCODE_NONE(false,23003,"请输入验证码！"),
     AUTH_ACCOUNT_NOTEXISTS(false,23004,"账号不存在！"),
     AUTH_CREDENTIAL_ERROR(false,23005,"账号或密码错误！"),
-    AUTH_LOGIN_ERROR(false,23006,"登陆过程出现异常请尝试重新操作！");
-
+    AUTH_LOGIN_ERROR(false,23006,"登陆过程出现异常请尝试重新操作！"),
+    AUTH_LOGIN_REDIS_ERROR(false,23007,"登陆过程access_token保存到redis异常！"),
+    AUTH_LOGIN_AUTHSERVER_NOTFOUND(false,23008,"服务注册中心找不到登入验证的服务"),
+    AUTH_LOGIN_APPLYTOKEN_FAIL(false,23009,"认证获取令牌失败"),
+    AUTH_USERNAME_PASSWORD_NULL(false,23010,"请输入账号和密码！");
     //操作代码
     @ApiModelProperty(value = "操作是否成功", example = "true", required = true)
     boolean success;
