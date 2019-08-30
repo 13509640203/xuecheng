@@ -71,10 +71,7 @@ public class CourseService {
 
   //查询课程计划
   public TeachplanNode findTeachplanList(String courseId){
-      int a=2;
-      if(a>0){
-         a=a-1;
-      }
+
       TeachplanNode courseList = teachplanMapper.findCourseList(courseId);
       return  courseList;
   }
