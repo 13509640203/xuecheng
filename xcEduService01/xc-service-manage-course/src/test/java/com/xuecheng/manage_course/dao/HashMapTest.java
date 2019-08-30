@@ -456,7 +456,7 @@ public class HashMapTest {
         buffer.append("ai");
         buffer.append("chi");
         buffer.append("rou");
-       // StringBuffer reverse = buffer.reverse();
+       // StringBuffer reverse = buffer.reverse(); sd34344
        // StringBuffer delete = buffer.delete(5, 7);
        // buffer.insert(3,8);//buffer=lanpozuiaichirou
         StringBuffer bu = buffer.replace(5, 8, "bu");
