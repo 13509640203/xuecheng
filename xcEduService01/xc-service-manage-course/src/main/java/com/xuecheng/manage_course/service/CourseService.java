@@ -72,9 +72,10 @@ public class CourseService {
   //查询课程计划
   public TeachplanNode findTeachplanList(String courseId){
       int a=2;
-      if(a>0){
+      if(a>0){//打打分大大大咖啡
          a=a-1;
       }
+     //湿哒哒大大大大
       TeachplanNode courseList = teachplanMapper.findCourseList(courseId);
       return  courseList;
   }
