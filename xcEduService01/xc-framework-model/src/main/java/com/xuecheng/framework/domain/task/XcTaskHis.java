@@ -37,6 +37,6 @@ public class XcTaskHis implements Serializable {
     private String mqRoutingkey;
     @Column(name = "request_body")
     private String requestBody;
-    private String version;
+    private Integer version;
     private String status;
 }

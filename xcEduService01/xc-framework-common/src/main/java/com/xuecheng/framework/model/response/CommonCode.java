@@ -18,7 +18,8 @@ public enum CommonCode implements ResultCode{
     UNAUTHORISE(false,10002,"权限不足，无权操作！"),
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！"),
     INVALID_PARAM(false,10003,"非法参数！"),
-    POST_FALL(false,10004,"页面发布失败");
+    POST_FALL(false,10004,"页面发布失败"),
+    LOGIN_FIRST(false,10005,"请先登入！");
 //    private static ImmutableMap<Integer, CommonCode> codes ;
     //操作是否成功
     boolean success;

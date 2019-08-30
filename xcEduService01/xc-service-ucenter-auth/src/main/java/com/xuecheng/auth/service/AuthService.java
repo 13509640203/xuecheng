@@ -5,6 +5,7 @@ import com.xuecheng.framework.client.XcServiceList;
 import com.xuecheng.framework.domain.ucenter.ext.AuthToken;
 import com.xuecheng.framework.domain.ucenter.response.AuthCode;
 import com.xuecheng.framework.exception.ExceptionCast;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +115,15 @@ public class AuthService {
 
         if(bodyMap==null||bodyMap.get("access_token")==null||bodyMap.get("refresh_token")==null||
         bodyMap.get("jti")==null){
+            String error_description = (String) bodyMap.get("error_description");
+            if(StringUtils.isNotEmpty(error_description)){
+                if(error_description.equals("坏的凭证")){
+                    ExceptionCast.cast(AuthCode.AUTH_CREDENTIAL_ERROR);
+                }else if(error_description.indexOf("UserDetailsService returned null")>=0){
+                    ExceptionCast.cast(AuthCode.AUTH_ACCOUNT_NOTEXISTS);
+                }
+            }
+           // ExceptionCast.cast(AuthCode.AUTH_LOGIN_APPLYTOKEN_FAIL);
          return  null;
         }
 
