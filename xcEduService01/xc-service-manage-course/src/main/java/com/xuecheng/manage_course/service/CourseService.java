@@ -76,7 +76,7 @@ public class CourseService {
       return  courseList;
   }
   //添加课程计划
-    @Transactional //CRUD都需要添加事务
+    @Transactional //CRUD都需要添加事务  dadasaddadad
     public ResponseResult addCourseTeachplan(Teachplan teachplan) {
         if(teachplan==null|| StringUtils.isEmpty(teachplan.getCourseid())||StringUtils.isEmpty(teachplan.getPname())){
             ExceptionCast.cast(CommonCode.INVALID_PARAM);//非法参数
