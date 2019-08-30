@@ -71,7 +71,7 @@ public class CourseService {
 
   //查询课程计划
   public TeachplanNode findTeachplanList(String courseId){
-
+     //湿哒哒大大大大
       TeachplanNode courseList = teachplanMapper.findCourseList(courseId);
       return  courseList;
   }
