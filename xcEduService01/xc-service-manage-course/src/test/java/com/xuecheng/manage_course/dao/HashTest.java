@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class HashTest {
+    private   int sum=1;
     @Test
     public void ArrayList() {
         List<Integer> aa = new ArrayList<>();
@@ -264,5 +265,47 @@ public class HashTest {
             }
         }
         System.out.println(list.toString());
+    }
+
+    @Test
+    public void digui1() {
+        int sum = digui2(5);
+        System.out.println("阶层结果： "+sum);
+        int num = digui3(6);
+        System.out.println("阶层结果num： "+num);
+        int nodigui = Nodigui(5);
+        System.out.println("阶层结果：nodigui "+nodigui);
+    }
+
+    public int digui2(int n) {
+        if(n>0){
+            sum=sum*n;
+            n--;
+            digui2(n);
+        }
+        return sum;
+    }
+
+    public int digui3(int n) {
+        if(n>0) {
+            if (n == 1) {
+                return 1;
+            }
+            return digui3(n - 1) * n;
+        }
+        return -1;
+    }
+    public int Nodigui(int n) {
+        if(n==1){
+            return 1;
+        }
+        if(n==0){
+            return 0;
+        }
+       int sum=1;
+        for(int m=n;m>=2;m--){
+            sum=sum*m;
+        }
+        return sum;
     }
 }
