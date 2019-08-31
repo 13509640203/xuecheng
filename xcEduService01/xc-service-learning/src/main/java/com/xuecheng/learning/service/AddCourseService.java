@@ -39,6 +39,8 @@ public class AddCourseService {
          //sdadkoadk
          //dadkald
        //dasdka 
+       //山东矿机爱可登
+       //到达
         XcLearningCourse xcLearningCourse = xcLearningCourseRepository.findXcLearningCourseByCourseIdAndUserId(courseId, userId);
        if(xcLearningCourse!=null){//更新
            xcLearningCourse.setStartTime(startTime);
