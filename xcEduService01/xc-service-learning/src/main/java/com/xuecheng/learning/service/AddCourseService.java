@@ -36,7 +36,9 @@ public class AddCourseService {
             ExceptionCast.cast(LearningCode.LEARNING_CourseId_NULL);
            }
 
-
+         //sdadkoadk
+         //dadkald
+       //dasdka 
         XcLearningCourse xcLearningCourse = xcLearningCourseRepository.findXcLearningCourseByCourseIdAndUserId(courseId, userId);
        if(xcLearningCourse!=null){//更新
            xcLearningCourse.setStartTime(startTime);
