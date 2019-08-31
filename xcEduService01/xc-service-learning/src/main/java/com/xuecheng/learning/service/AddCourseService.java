@@ -35,9 +35,8 @@ public class AddCourseService {
           if(StringUtils.isEmpty(courseId)){
             ExceptionCast.cast(LearningCode.LEARNING_CourseId_NULL);
            }
-            int m=1;
-            int j=0;
-         //sdadkoadk
+           int m=6;
+            int j=11;         //sdadkoadk
          //dadkald
        //dasdka 
        //山东矿机爱可登adkkjad
