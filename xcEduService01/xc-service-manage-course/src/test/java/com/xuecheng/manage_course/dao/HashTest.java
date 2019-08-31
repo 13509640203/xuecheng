@@ -268,8 +268,8 @@ public class HashTest {
     }
 
     @Test
-    public void digui1() {
-        int sum = digui2(5);
+    public void digui1() {//adadjdakd
+        int sum = digui2(5);//dakdjad
         System.out.println("阶层结果： "+sum);
         int num = digui3(6);
         System.out.println("阶层结果num： "+num);
