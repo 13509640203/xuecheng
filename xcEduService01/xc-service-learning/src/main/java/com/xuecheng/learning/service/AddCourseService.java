@@ -36,7 +36,7 @@ public class AddCourseService {
             ExceptionCast.cast(LearningCode.LEARNING_CourseId_NULL);
            }
            int m=7;
-            int j=11;         //sdadkoadk
+            int j=111;         //sdadkoadk
          //dadkald
        //dasdka 
        //山东矿机爱可登adkkjad
