@@ -35,7 +35,8 @@ public class AddCourseService {
           if(StringUtils.isEmpty(courseId)){
             ExceptionCast.cast(LearningCode.LEARNING_CourseId_NULL);
            }
-
+           int m=7;
+            int j=11;
          //sdadkoadk
          //dadkald
        //dasdka 
